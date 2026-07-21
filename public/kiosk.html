@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AQMS Kiosk</title>
+
+<link rel="stylesheet" href="css/kiosk.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>🚰 PERUMDA AIR MINUM</h1>
+
+        <p>ANTRIAN QUEUE MANAGEMENT SYSTEM</p>
+
+    </div>
+
+    <div class="service">
+
+        CUSTOMER SERVICE
+
+    </div>
+
+    <div class="nomor">
+
+        <div class="label">
+
+            Tekan tombol di bawah untuk mengambil nomor antrean
+
+        </div>
+
+        <button id="ambil">
+
+            AMBIL NOMOR
+
+        </button>
+
+    </div>
+
+    <div id="hasil"></div>
+
+    <div class="footer">
+
+        AQMS v0.7.2<br>
+
+        Developed by <strong>Dahe Ugi</strong><br>
+
+        Development assisted by <strong>ChatGPT (OpenAI)</strong>
+
+    </div>
+
+</div>
+
+<!-- Overlay -->
+
+<div id="overlay" class="overlay hidden">
+
+    <div class="success-card">
+
+        <div class="checkmark">
+
+            ✔
+
+        </div>
+
+        <h2>Nomor Anda</h2>
+
+        <div id="popup-number">
+
+            A001
+
+        </div>
+
+        <p>
+
+            Silakan menunggu hingga dipanggil.
+
+        </p>
+
+    </div>
+
+</div>
+
+<script src="js/kiosk.js"></script>
+
+</body>
+
+</html>

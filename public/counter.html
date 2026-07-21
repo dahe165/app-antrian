@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter Operator</title>
+
+    <style>
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background:#f4f6f9;
+            margin:0;
+        }
+
+        .container{
+            width:800px;
+            margin:30px auto;
+            background:#fff;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,.15);
+            overflow:hidden;
+        }
+
+        .header{
+            background:#0d6efd;
+            color:white;
+            padding:20px;
+            text-align:center;
+        }
+
+        .section{
+            padding:20px;
+        }
+
+        .current-number{
+
+            font-size:70px;
+            text-align:center;
+            color:#0d6efd;
+            font-weight:bold;
+            margin:20px 0;
+
+        }
+
+        .waiting-list{
+
+            border:1px solid #ddd;
+            border-radius:5px;
+            padding:15px;
+            min-height:150px;
+
+        }
+
+        .waiting-item{
+
+            font-size:24px;
+            padding:8px;
+            border-bottom:1px solid #eee;
+
+        }
+
+        .buttons{
+
+            margin-top:25px;
+            text-align:center;
+
+        }
+
+        button{
+
+            padding:15px 30px;
+            font-size:18px;
+            margin:5px;
+            cursor:pointer;
+
+        }
+
+        #btnCall{
+
+            background:#198754;
+            color:white;
+            border:none;
+
+        }
+
+        #btnRecall{
+
+            background:#ffc107;
+            border:none;
+
+        }
+
+        #btnFinish{
+
+            background:#dc3545;
+            color:white;
+            border:none;
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>🚰 PDAM Queue System</h1>
+
+        <h2>COUNTER 1</h2>
+
+    </div>
+
+    <div class="section">
+
+        <h3>Sedang Dipanggil</h3>
+
+        <div class="current-number" id="currentNumber">
+            -
+        </div>
+
+        <hr>
+
+        <h3>Daftar Menunggu</h3>
+
+        <div id="waitingList" class="waiting-list">
+
+            Belum ada antrean.
+
+        </div>
+
+        <div class="buttons">
+
+            <button id="btnCall">
+                ▶ Panggil Berikutnya
+            </button>
+
+            <button id="btnRecall">
+                🔄 Panggil Ulang
+            </button>
+
+            <button id="btnFinish">
+                ✔ Selesai
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/counter.js"></script>
+
+</body>
+</html>

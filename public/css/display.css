@@ -1,0 +1,169 @@
+body{
+
+    margin:0;
+
+    background:#0b1b34;
+
+    color:white;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 40px;
+
+    background:#072046;
+
+    font-size:32px;
+
+}
+
+.logo{
+
+    font-weight:bold;
+
+}
+
+.clock{
+
+    font-size:40px;
+
+}
+
+.main{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:65vh;
+
+}
+
+.service{
+
+    font-size:50px;
+
+    margin-bottom:20px;
+
+}
+
+.label{
+
+    font-size:38px;
+
+}
+
+.number{
+
+    font-size:180px;
+
+    color:#FFD700;
+
+    font-weight:bold;
+
+    margin:20px;
+
+    transition:all .3s;
+
+}
+
+.counter{
+
+    font-size:55px;
+
+}
+
+.message{
+
+    text-align:center;
+
+    font-size:28px;
+
+    padding:20px;
+
+}
+
+.footer{
+
+    position:fixed;
+
+    bottom:0;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#021326;
+
+    border-top:2px solid #0d5ea6;
+
+}
+
+.footer-left{
+
+    width:320px;
+
+    padding:15px 20px;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    color:#d6e8ff;
+
+    border-right:1px solid rgba(255,255,255,.15);
+
+}
+
+.footer-right{
+
+    flex:1;
+
+    color:#FFD700;
+
+    font-size:22px;
+
+    padding:10px;
+
+}
+@keyframes pulse {
+
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    50%{
+        transform:scale(1.08);
+        opacity:.7;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+.number.speaking{
+
+    animation:pulse .8s infinite;
+
+}
