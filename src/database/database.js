@@ -15,6 +15,8 @@ const dbPath = path.join(dataDir, "queue.db");
 // Buka / buat database
 const db = new Database(dbPath);
 
+console.log("📁 Database:", dbPath);
+
 // Aktifkan Foreign Key
 db.pragma("foreign_keys = ON");
 

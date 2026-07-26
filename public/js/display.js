@@ -101,7 +101,10 @@ socket.on("queue-called", (queue) => {
 
             console.log(">>> CALLBACK DARI DISPLAY");
 
-            socket.emit("announcement-finished");
+            // socket.emit("announcement-finished");
+            socket.emit("announcement-finished", {
+            counter: queue.counter
+            });
 
             number.classList.remove("speaking");
 

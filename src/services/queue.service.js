@@ -69,22 +69,70 @@ function getCurrentQueue(counter = 1) {
 }
 
 /**
+ * Mengambil nomor yang sedang aktif di counter
+ * (CALLING atau SERVING)
+ */
+function getActiveQueue(counter = 1) {
+
+    return db.prepare(`
+        SELECT *
+        FROM queues
+        WHERE counter = ?
+        AND status IN ('CALLING','SERVING')
+        ORDER BY id DESC
+        LIMIT 1
+    `).get(counter);
+
+}
+
+/**
+* Mengubah status CALLING menjadi SERVING
+*/
+function startServing(counter = 1) {
+
+    db.prepare(`
+        UPDATE queues
+        SET status='SERVING'
+        WHERE counter=?
+        AND status='CALLING'
+    `).run(counter);
+
+}
+
+function getServingQueue(counter = 1){
+
+    return db.prepare(`
+        SELECT *
+        FROM queues
+        WHERE counter=?
+        AND status='SERVING'
+        ORDER BY called_at DESC
+        LIMIT 1
+    `).get(counter);
+
+}
+
+/**
+ * Ambil nomor yang sedang SERVING
+ * untuk dipanggil ulang
+ */
+function recallQueue(counter = 1) {
+
+    return db.prepare(`
+        SELECT *
+        FROM queues
+        WHERE counter = ?
+        AND status = 'SERVING'
+        ORDER BY id DESC
+        LIMIT 1
+    `).get(counter);
+
+}
+
+/**
  * Memanggil antrean berikutnya
  */
 function callNextQueue(counter = 1, layanan = "A") {
-
-    // jika counter masih memanggil nomor sebelumnya
-    const current = getCurrentQueue(counter);
-
-    if (current) {
-
-        db.prepare(`
-            UPDATE queues
-            SET status='SERVING'
-            WHERE id=?
-        `).run(current.id);
-
-    }
 
     // ambil antrean berikutnya
     const next = db.prepare(`
@@ -124,13 +172,23 @@ function callNextQueue(counter = 1, layanan = "A") {
  */
 function finishQueue(id) {
 
-    db.prepare(`
+    const result = db.prepare(`
         UPDATE queues
         SET
             status='FINISHED',
             finished_at=CURRENT_TIMESTAMP
         WHERE id=?
     `).run(id);
+
+    console.log(result);
+
+    const row = db.prepare(`
+        SELECT *
+        FROM queues
+        WHERE id=?
+    `).get(id);
+
+    console.log("SETELAH UPDATE:", row);
 
 }
 
@@ -142,7 +200,8 @@ function skipQueue(id) {
     db.prepare(`
         UPDATE queues
         SET
-            status='SKIPPED'
+            status='SKIPPED',
+            finished_at=CURRENT_TIMESTAMP
         WHERE id=?
     `).run(id);
 
@@ -156,7 +215,15 @@ module.exports = {
 
     getCurrentQueue,
 
+    getActiveQueue,
+
+    getServingQueue,
+
+    recallQueue,
+
     callNextQueue,
+
+    startServing,
 
     finishQueue,
 

@@ -3,6 +3,12 @@ const waitingList = document.getElementById("waitingList");
 
 const btnCall = document.getElementById("btnCall");
 
+const btnFinish = document.getElementById("btnFinish");
+
+const btnRecall = document.getElementById("btnRecall");
+
+const btnSkip = document.getElementById("btnSkip");
+
 const socket = io();
 
 let announcementBusy = false;
@@ -97,6 +103,97 @@ btnCall.addEventListener("click", async () => {
 
 });
 
+btnFinish.addEventListener("click", async () => {
+
+    const response = await fetch("/api/finish", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            counter: 1
+
+        })
+
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+
+        alert(result.message);
+
+        return;
+
+    }
+
+    await loadCurrent();
+    await loadWaiting();
+
+});
+
+btnRecall.addEventListener("click", async () => {
+
+    const response = await fetch("/api/recall", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+
+            counter:1
+
+        })
+
+    });
+
+    const result = await response.json();
+
+    if(!result.success){
+
+        alert(result.message);
+
+    }
+
+});
+
+btnSkip.addEventListener("click", async () => {
+
+    const response = await fetch("/api/skip", {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            counter:1,
+
+            layanan:"A"
+
+        })
+
+    });
+
+    const result = await response.json();
+
+    if(!result.success){
+
+        alert(result.message);
+
+    }
+
+});
+
 // Pertama kali halaman dibuka
 loadCurrent();
 loadWaiting();
@@ -123,6 +220,16 @@ socket.on("announcement-status", (data) => {
 socket.on("queue-updated", async () => {
 
     console.log("📥 Queue Updated");
+
+    await loadWaiting();
+
+});
+
+socket.on("queue-called", async (queue) => {
+
+    console.log("📢 Counter menerima queue-called:", queue.nomor);
+
+    currentNumber.textContent = queue.nomor;
 
     await loadWaiting();
 

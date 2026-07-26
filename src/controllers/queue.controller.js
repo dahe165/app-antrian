@@ -68,7 +68,8 @@ function getCurrentQueue(req, res) {
 
         const counter = Number(req.query.counter || 1);
 
-        const data = queueService.getCurrentQueue(counter);
+        // const data = queueService.getCurrentQueue(counter);
+        const data = queueService.getActiveQueue(counter);
 
         res.json(data || null);
 
@@ -79,6 +80,111 @@ function getCurrentQueue(req, res) {
         res.status(500).json({
             success: false,
             message: err.message
+        });
+
+    }
+
+}
+
+function recallQueue(req, res) {
+
+    try {
+
+        const counter = Number(req.body.counter || 1);
+
+        const queue = queueService.recallQueue(counter);
+
+        if (!queue) {
+
+            return res.json({
+                success: false,
+                message: "Tidak ada nomor yang sedang dilayani."
+            });
+
+        }
+
+        queueLock.lock();
+
+        socket.getIO().emit("announcement-status", {
+            busy: true
+        });
+
+        console.log("🔄 RECALL:", queue);
+
+        socket.getIO().emit("queue-called", queue);
+
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success:false,
+            message:err.message
+        });
+
+    }
+
+}
+
+function skipQueue(req, res) {
+
+    try {
+
+        const counter = Number(req.body.counter || 1);
+        const layanan = req.body.layanan || "A";
+
+        const current = queueService.getServingQueue(counter);
+
+        if (!current) {
+
+            return res.json({
+                success:false,
+                message:"Tidak ada antrean yang sedang dilayani."
+            });
+
+        }
+
+        console.log("⏭ SKIP:", current.nomor);
+
+        queueService.skipQueue(current.id);
+
+        const next = queueService.callNextQueue(counter, layanan);
+
+        if (!next) {
+
+            socket.getIO().emit("queue-updated");
+
+            return res.json({
+                success:true
+            });
+
+        }
+
+        queueLock.lock();
+
+        socket.getIO().emit("announcement-status",{
+            busy:true
+        });
+
+        socket.getIO().emit("queue-called",next);
+
+        socket.getIO().emit("queue-updated");
+
+        res.json({
+            success:true
+        });
+
+    } catch(err){
+
+        console.error(err);
+
+        res.status(500).json({
+            success:false,
+            message:err.message
         });
 
     }
@@ -146,6 +252,48 @@ function callNextQueue(req, res) {
 
 }
 
+function finishQueue(req, res) {
+
+    try {
+
+        const counter = Number(req.body.counter || 1);
+
+        const current = queueService.getServingQueue(counter);
+
+        console.log("CURRENT SERVING:", current);
+
+        if (!current) {
+
+            return res.json({
+                success: false,
+                message: "Tidak ada pelanggan yang sedang dilayani."
+            });
+
+        }
+
+        console.log("AKAN FINISH ID:", current.id);
+
+        queueService.finishQueue(current.id);
+
+        socket.getIO().emit("queue-updated");
+
+        res.json({
+            success: true
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success:false,
+            message:err.message
+        });
+
+    }
+
+}
+
 module.exports = {
 
     createQueue,
@@ -154,6 +302,12 @@ module.exports = {
 
     getCurrentQueue,
 
-    callNextQueue
+    callNextQueue,
+
+    finishQueue,
+
+    recallQueue,
+
+    skipQueue
 
 };

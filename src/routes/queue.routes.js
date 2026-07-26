@@ -15,4 +15,11 @@ router.get("/current", queueController.getCurrentQueue);
 // Panggil nomor berikutnya
 router.post("/call", queueController.callNextQueue);
 
+// Selesaikan pelayanan
+router.post("/finish", queueController.finishQueue);
+
+router.post("/recall", queueController.recallQueue);
+
+router.post("/skip", queueController.skipQueue);
+
 module.exports = router;

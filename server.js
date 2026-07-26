@@ -21,9 +21,16 @@ io.on("connection", (client) => {
 
     console.log("🟢 Client terhubung:", client.id);
 
-    client.on("announcement-finished", () => {
+    // baru ditambahkan
+    const queueService = require("./src/services/queue.service");
+    
+   // client.on("announcement-finished", () => {
+    client.on("announcement-finished", (data) => {
 
         console.log("🟢 Server menerima announcement-finished");
+
+        // baru tambahkan
+        queueService.startServing(data.counter);
 
         queueLock.unlock();
 
