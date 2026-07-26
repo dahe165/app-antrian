@@ -4,7 +4,7 @@ function speak(text, callback = null) {
 
     utterance.lang = "id-ID";
     utterance.rate = 0.88;
-    utterance.pitch = 1;
+    utterance.pitch = 1.2;
     utterance.volume = 1;
 
     utterance.onend = () => {
@@ -56,9 +56,15 @@ function announceQueue(queue, finished = null){
 
                         speak(`Silakan menuju Counter ${queue.counter}`, ()=>{
 
-                            if(finished){
-                                finished();
-                            }
+                        console.log(">>> KALIMAT TERAKHIR SELESAI");
+
+                        if(finished){
+
+                         console.log(">>> MEMANGGIL FINISHED");
+
+                         finished();
+
+                          }
 
                         });
 

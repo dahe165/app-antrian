@@ -10,6 +10,7 @@ const socket = require("./src/socket/socket");
 
 socket.init(io);
 const queueRoutes = require("./src/routes/queue.routes");
+const queueLock = require("./src/core/queueLock");
 app.use(express.json());
 app.use("/api", queueRoutes);
 // Folder public
@@ -19,6 +20,20 @@ app.use(express.static("public"));
 io.on("connection", (client) => {
 
     console.log("🟢 Client terhubung:", client.id);
+
+    client.on("announcement-finished", () => {
+
+        console.log("🟢 Server menerima announcement-finished");
+
+        queueLock.unlock();
+
+        // Beritahu semua Counter bahwa sistem sudah siap lagi
+        io.emit("announcement-status", {
+            busy: false
+        });
+
+
+    });
 
     client.on("disconnect", () => {
 

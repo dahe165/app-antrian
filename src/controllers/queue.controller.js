@@ -1,5 +1,6 @@
 const queueService = require("../services/queue.service");
 const socket = require("../socket/socket");
+const queueLock = require("../core/queueLock");
 /**
  * Membuat nomor antrean baru
  */
@@ -10,6 +11,9 @@ function createQueue(req, res) {
         const layanan = req.body?.layanan || "A";
 
         const nomor = queueService.createQueue(layanan);
+
+        // Beri tahu semua Counter bahwa daftar antrean berubah
+        socket.getIO().emit("queue-updated");
 
         res.status(201).json({
             success: true,
@@ -86,11 +90,22 @@ function getCurrentQueue(req, res) {
  */
 function callNextQueue(req, res) {
 
+    console.log("🔥🔥🔥 CALL NEXT MASUK 🔥🔥🔥");
+
     try {
 
         const counter = Number(req.body.counter || 1);
         const layanan = req.body.layanan || "A";
 
+        if (queueLock.isLocked()) {
+
+           return res.json({
+           success: false,
+           message: "Masih ada pengumuman yang sedang berlangsung."
+        });
+
+        }
+        
         const data = queueService.callNextQueue(counter, layanan);
 
         if (!data) {
@@ -101,8 +116,18 @@ function callNextQueue(req, res) {
             });
 
         }
-// Kirim event ke semua browser yang terhubung
-socket.getIO().emit("queue-called", data);
+
+        queueLock.lock();
+
+        // Semua Counter tahu bahwa sedang ada pengumuman
+        socket.getIO().emit("announcement-status", {
+            busy: true
+        });
+
+        console.log("📢 Mengirim queue-called:", data);
+
+        // Kirim event ke semua browser yang terhubung
+        socket.getIO().emit("queue-called", data);
         res.json({
             success: true,
             data

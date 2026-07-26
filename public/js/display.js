@@ -51,6 +51,18 @@ function speakQueue(queue){
     utterance.pitch = 1;
     utterance.volume = 1;
 
+utterance.onstart = () => {
+    console.log("🎤 Mulai mengumumkan:", queue.nomor);
+};
+
+utterance.onend = () => {
+    console.log("✅ Selesai mengumumkan:", queue.nomor);
+};
+
+utterance.onerror = (e) => {
+    console.error("❌ Gagal mengumumkan:", queue.nomor, e);
+};
+
     synth.speak(utterance);
 
 }
@@ -71,6 +83,8 @@ updateClock();
 // Socket.IO
 socket.on("queue-called", (queue) => {
 
+    console.log("📺 Display menerima queue-called:", queue);
+
     number.style.transform = "scale(1.3)";
 
     number.textContent = queue.nomor;
@@ -85,11 +99,15 @@ socket.on("queue-called", (queue) => {
 
         announceQueue(queue, () => {
 
+            console.log(">>> CALLBACK DARI DISPLAY");
+
+            socket.emit("announcement-finished");
+
             number.classList.remove("speaking");
 
         });
 
-    }, 700);
+    }, 3000);
 
     setTimeout(() => {
 
