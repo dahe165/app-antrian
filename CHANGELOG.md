@@ -60,6 +60,36 @@ Semua perubahan penting pada proyek \*\*app-antrian\*\* akan dicatat di file ini
 
 
 
+Berikut ini alur yang dapat dilakukan APP-ANTRIAN
+
+
+                 KIOSK
+                   │
+                   ▼
+              WAITING
+                   │
+                   ▼
+          ▶ Panggil Berikutnya
+                   │
+                   ▼
+              CALLING
+                   │
+          Display TV + Voice
+                   │
+         announcement-finished
+                   │
+                   ▼
+              SERVING
+          ┌────────┼─────────┐
+          │        │         │
+          ▼        ▼         ▼
+      Recall    Finish     Skip
+          │        │         │
+          │        ▼         ▼
+          │    FINISHED   SKIPPED
+          │                  │
+          └──────────────────┘
+                 lanjut antrean
 
 
 
