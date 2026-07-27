@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const queueController = require("../controllers/queue.controller");
+const counterController = require("../controllers/counter.controller");
 
 // Membuat nomor antrean
 router.post("/ticket", queueController.createQueue);
@@ -11,6 +12,10 @@ router.get("/waiting", queueController.getWaitingQueues);
 
 // Nomor yang sedang dipanggil
 router.get("/current", queueController.getCurrentQueue);
+
+router.get("/counters", counterController.getCounters);
+
+router.post("/counter/status", counterController.setStatus);
 
 // Panggil nomor berikutnya
 router.post("/call", queueController.callNextQueue);

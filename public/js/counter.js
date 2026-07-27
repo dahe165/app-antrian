@@ -11,12 +11,42 @@ const btnSkip = document.getElementById("btnSkip");
 
 const socket = io();
 
+// Ambil ID Counter dari URL
+const params = new URLSearchParams(window.location.search);
+const COUNTER_ID = Number(params.get("id") || 1);
+
+// Ubah judul Counter
+document.getElementById("counterTitle").textContent =
+    `COUNTER ${COUNTER_ID}`;
+
 let announcementBusy = false;
+
+async function setCounterStatus(status) {
+
+    await fetch("/api/counter/status", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            id: COUNTER_ID,
+
+            status
+
+        })
+
+    });
+
+}
 
 // Ambil nomor yang sedang dipanggil
 async function loadCurrent() {
 
-    const response = await fetch("/api/current?counter=1");
+    const response = await fetch(`/api/current?counter=${COUNTER_ID}`);
 
     const data = await response.json();
 
@@ -79,7 +109,7 @@ btnCall.addEventListener("click", async () => {
 
         body: JSON.stringify({
 
-            counter: 1,
+            counter: COUNTER_ID,
 
             layanan: "A"
 
@@ -115,7 +145,7 @@ btnFinish.addEventListener("click", async () => {
 
         body: JSON.stringify({
 
-            counter: 1
+            counter: COUNTER_ID
 
         })
 
@@ -148,7 +178,7 @@ btnRecall.addEventListener("click", async () => {
 
         body: JSON.stringify({
 
-            counter:1
+            counter: COUNTER_ID
 
         })
 
@@ -176,7 +206,7 @@ btnSkip.addEventListener("click", async () => {
 
         body:JSON.stringify({
 
-            counter:1,
+            counter: COUNTER_ID,
 
             layanan:"A"
 
@@ -195,6 +225,7 @@ btnSkip.addEventListener("click", async () => {
 });
 
 // Pertama kali halaman dibuka
+setCounterStatus("ONLINE");
 loadCurrent();
 loadWaiting();
 
@@ -227,10 +258,32 @@ socket.on("queue-updated", async () => {
 
 socket.on("queue-called", async (queue) => {
 
-    console.log("📢 Counter menerima queue-called:", queue.nomor);
+    if (queue.counter !== COUNTER_ID) return;
 
-    currentNumber.textContent = queue.nomor;
+    await loadCurrent();
 
     await loadWaiting();
+
+});
+
+window.addEventListener("beforeunload", () => {
+
+    navigator.sendBeacon(
+        "/api/counter/status",
+        new Blob(
+            [
+                JSON.stringify({
+
+                    id: COUNTER_ID,
+
+                    status: "OFFLINE"
+
+                })
+            ],
+            {
+                type: "application/json"
+            }
+        )
+    );
 
 });

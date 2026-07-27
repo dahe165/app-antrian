@@ -44,6 +44,45 @@ CREATE TABLE IF NOT EXISTS queues (
 );
 `);
 
+db.exec(`
+CREATE TABLE IF NOT EXISTS counters (
+
+    id INTEGER PRIMARY KEY,
+
+    name TEXT NOT NULL,
+
+    status TEXT NOT NULL DEFAULT 'OFFLINE'
+
+);
+`);
+
+const count = db.prepare(`
+SELECT COUNT(*) total
+FROM counters
+`).get();
+
+if (count.total === 0) {
+
+    const insert = db.prepare(`
+        INSERT INTO counters
+        (id,name,status)
+        VALUES (?,?,?)
+    `);
+
+    for (let i = 1; i <= 4; i++) {
+
+        insert.run(
+            i,
+            `Counter ${i}`,
+            "OFFLINE"
+        );
+
+    }
+
+}
+
+console.log("✅ Default Counter berhasil dibuat");
+
 console.log("✅ Database siap digunakan");
 
 module.exports = db;

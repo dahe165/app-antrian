@@ -234,6 +234,7 @@ function callNextQueue(req, res) {
 
         // Kirim event ke semua browser yang terhubung
         socket.getIO().emit("queue-called", data);
+        socket.getIO().emit("queue-updated");
         res.json({
             success: true,
             data
