@@ -21,6 +21,10 @@ document.getElementById("counterTitle").textContent =
 
 let announcementBusy = false;
 
+const serviceTimer = document.getElementById("serviceTimer");
+
+let timerInterval = null;
+
 async function setCounterStatus(status) {
 
     await fetch("/api/counter/status", {
@@ -50,10 +54,18 @@ async function loadCurrent() {
 
     const data = await response.json();
 
-    if (data) {
+    if(data){
+
         currentNumber.textContent = data.nomor;
-    } else {
-        currentNumber.textContent = "-";
+
+        startServiceTimer(data.called_at);
+
+    }else{
+
+        currentNumber.textContent="-";
+
+        serviceTimer.textContent="00:00";
+
     }
 
 }
@@ -163,6 +175,8 @@ btnFinish.addEventListener("click", async () => {
 
     await loadCurrent();
     await loadWaiting();
+    clearInterval(timerInterval);
+    serviceTimer.textContent = "00:00";
 
 });
 
@@ -228,6 +242,41 @@ btnSkip.addEventListener("click", async () => {
 setCounterStatus("ONLINE");
 loadCurrent();
 loadWaiting();
+
+function startServiceTimer(calledAt) {
+
+    if (timerInterval) {
+
+       clearInterval(timerInterval);
+
+    }
+
+    function update() {
+
+        const start = new Date(calledAt.replace(" ", "T"));
+
+        const now = new Date();
+
+        console.log("calledAt:", calledAt);
+        console.log("start:", start);
+        console.log("now:", now);
+
+        const diff = Math.floor((now - start) / 1000);
+
+        const minutes = Math.floor(diff / 60);
+
+        const seconds = diff % 60;
+
+        serviceTimer.textContent =
+            `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+
+    }
+
+    update();
+
+    timerInterval = setInterval(update,1000);
+
+}
 
 socket.on("announcement-status", (data) => {
 

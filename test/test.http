@@ -5,3 +5,8 @@ Content-Type: application/json
     "counter": 1,
     "layanan": "A"
 }
+
+// git add CHANGELOG.md
+// git commit -m "docs: tambah file CHANGELOG.md untuk riwayat rilis"
+// git push origin main
+

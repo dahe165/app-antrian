@@ -155,7 +155,7 @@ function callNextQueue(counter = 1, layanan = "A") {
         SET
             status='CALLING',
             counter=?,
-            called_at=CURRENT_TIMESTAMP
+            called_at=datetime('now','localtime')
         WHERE id=?
     `).run(counter, next.id);
 
@@ -176,7 +176,7 @@ function finishQueue(id) {
         UPDATE queues
         SET
             status='FINISHED',
-            finished_at=CURRENT_TIMESTAMP
+            finished_at=datetime('now','localtime')
         WHERE id=?
     `).run(id);
 
@@ -201,7 +201,7 @@ function skipQueue(id) {
         UPDATE queues
         SET
             status='SKIPPED',
-            finished_at=CURRENT_TIMESTAMP
+            finished_at=datetime('now','localtime')
         WHERE id=?
     `).run(id);
 

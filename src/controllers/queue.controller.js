@@ -197,6 +197,7 @@ function skipQueue(req, res) {
 function callNextQueue(req, res) {
 
     console.log("🔥🔥🔥 CALL NEXT MASUK 🔥🔥🔥");
+    console.log("Waktu Node sekarang:", new Date());
 
     try {
 
