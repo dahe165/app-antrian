@@ -11,8 +11,10 @@ const socket = require("./src/socket/socket");
 socket.init(io);
 const queueRoutes = require("./src/routes/queue.routes");
 const queueLock = require("./src/core/queueLock");
+const dashboardRoutes = require("./src/routes/dashboard.routes");
 app.use(express.json());
 app.use("/api", queueRoutes);
+app.use("/api", dashboardRoutes);
 // Folder public
 app.use(express.static("public"));
 
@@ -39,6 +41,8 @@ io.on("connection", (client) => {
             busy: false
         });
 
+        // 🔥 Tambahkan ini
+        io.emit("queue-updated");
 
     });
 

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDAM AQMS Dashboard</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f6f9;
+}
+
+.header{
+
+    background:#0d6efd;
+    color:white;
+    padding:20px;
+
+}
+
+.header h1{
+
+    margin:0;
+
+}
+
+.header p{
+
+    margin-top:8px;
+    opacity:.9;
+
+}
+
+.cards{
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+
+    padding:25px;
+
+}
+
+.card{
+
+    border-radius:12px;
+
+    padding:25px;
+
+    color:white;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.15);
+
+    transition:.25s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.total{
+
+    background:#0d6efd;
+
+}
+
+.waiting{
+
+    background:#ffc107;
+
+    color:#222;
+
+}
+
+.calling{
+
+    background:#dc3545;
+
+}
+
+.serving{
+
+    background:#198754;
+
+}
+
+.finished{
+
+    background:#20c997;
+
+}
+
+.skipped{
+
+    background:#6c757d;
+
+}
+
+.card-title{
+
+    font-size:20px;
+
+    color:#777;
+
+}
+
+.card-value{
+
+    font-size:52px;
+
+    font-weight:bold;
+
+    margin-top:15px;
+
+}
+
+/* ===== Monitoring Counter ===== */
+
+#counterContainer{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:20px;
+
+    padding:25px;
+
+}
+
+.counter-card{
+
+    background:#fff;
+
+    border-radius:14px;
+
+    padding:20px;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+
+    transition:.25s;
+
+}
+
+.counter-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.counter-title{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#333;
+
+    margin-bottom:15px;
+
+}
+
+.counter-item{
+
+    margin:12px 0;
+
+    font-size:17px;
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:4px 12px;
+
+    border-radius:20px;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    color:white;
+
+}
+
+.online{
+
+    background:#198754;
+
+}
+
+.offline{
+
+    background:#dc3545;
+
+}
+
+.serving{
+
+    background:#198754;
+
+}
+
+.calling{
+
+    background:#fd7e14;
+
+}
+
+.waiting{
+
+    background:#6c757d;
+
+}
+
+.number{
+
+    font-size:34px;
+
+    font-weight:bold;
+
+    color:#0d6efd;
+
+    margin-top:8px;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    color:#888;
+
+    padding:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>🚰 PDAM AQMS Dashboard</h1>
+
+<p id="clock"></p>
+
+</div>
+
+<div class="cards">
+
+<div class="card total">
+
+<div class="card-title">
+
+👥 Total Hari Ini
+
+</div>
+
+<div id="total" class="card-value">
+
+0
+
+</div>
+
+</div>
+
+<div class="card waiting">
+
+<div class="card-title">
+
+⏳ Menunggu
+
+</div>
+
+<div id="waiting" class="card-value">
+
+0
+
+</div>
+
+</div>
+
+<div class="card calling">
+
+<div class="card-title">
+
+📢 Calling
+
+</div>
+
+<div id="calling" class="card-value">
+
+0
+
+</div>
+
+</div>
+
+<div class="card serving">
+
+<div class="card-title">
+
+👨‍💼 Serving
+
+</div>
+
+<div id="serving" class="card-value">
+
+0
+
+</div>
+
+</div>
+
+<div class="card finished">
+
+<div class="card-title">
+
+✅ Finished
+
+</div>
+
+<div id="finished" class="card-value">
+
+0
+
+</div>
+
+</div>
+
+<div class="card skipped">
+
+<div class="card-title">
+
+⏭ Skipped
+
+</div>
+
+<div id="skipped" class="card-value">
+
+0
+
+</div>
+
+</div>
+
+</div>
+
+<h2 style="margin:20px;">🖥️ Monitoring Counter</h2>
+
+<div id="counterContainer" class="cards">
+
+</div>
+
+<div class="footer">
+
+PDAM Queue Management System
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

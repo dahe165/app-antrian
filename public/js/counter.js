@@ -16,8 +16,7 @@ const params = new URLSearchParams(window.location.search);
 const COUNTER_ID = Number(params.get("id") || 1);
 
 // Ubah judul Counter
-document.getElementById("counterTitle").textContent =
-    `COUNTER ${COUNTER_ID}`;
+document.getElementById("counterTitle").textContent = `COUNTER ${COUNTER_ID}`;
 
 let announcementBusy = false;
 
