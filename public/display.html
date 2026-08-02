@@ -11,6 +11,8 @@
 
 <body>
 
+<div id="displayWrapper" class="display-wrapper idle-mode">
+
 <div class="header">
 
     <div class="logo">
@@ -23,23 +25,56 @@
 
 </div>
 
-<div class="main">
+<div class="content">
 
-    <div class="service">
-        CUSTOMER SERVICE
+    <!-- Panel Nomor Antrian -->
+
+    <div class="queue-panel">
+
+        <div class="service">
+            CUSTOMER SERVICE
+        </div>
+
+        <div class="label">
+            NOMOR ANTRIAN
+        </div>
+
+        <div id="number" class="number">
+            -
+        </div>
+
+        <div id="counter" class="counter">
+            Counter -
+        </div>
+
     </div>
 
-    <div class="label">
-        NOMOR ANTRIAN
-    </div>
+    <!-- Panel Video -->
 
-    <div id="number" class="number">
-        -
-    </div>
+    <div class="video-panel">
 
-    <div id="counter" class="counter">
-        Counter -
+        <div class="video-placeholder">
+
+            <div id="videoContainer" class="video-container">
+
+                <video
+                    id="promoVideo"
+                    autoplay
+                    muted
+                    playsinline
+                ></video>            
+
+                <img
+                    id="promoImage"
+                    style="display:none"
+                >
+
+            </div>
+
+        </div>
+
     </div>
+    
 
 </div>
 
@@ -55,7 +90,7 @@
 
         <strong>AQMS v0.7.0</strong><br>
 
-        Developed by <strong>Dahe Ugi</strong><br>
+        Developed by <strong>Vicky</strong><br>
 
         Development assisted by <strong>ChatGPT (OpenAI)</strong>
 
@@ -63,14 +98,11 @@
 
     <div class="footer-right">
 
-        <marquee>
-
-            Selamat datang di Perumda Air Minum • Terima kasih telah menggunakan layanan kami • AQMS Queue Management System
-
-        </marquee>
+        <div id="timeline" class="timeline"></div>
 
     </div>
 
+</div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

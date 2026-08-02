@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDAM AQMS Control Center</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#eef2f7;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.header{
+
+    background:#0d6efd;
+    color:white;
+    padding:25px;
+
+}
+
+.container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:20px;
+
+}
+
+.panel{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+
+}
+
+.queue-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+
+    gap:15px;
+
+}
+
+.queue-card{
+
+    background:#0d6efd;
+
+    color:white;
+
+    border-radius:10px;
+
+    padding:20px;
+
+    text-align:center;
+
+}
+
+.queue-card span{
+
+    font-size:42px;
+
+    font-weight:bold;
+
+}
+
+.quick-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+    margin-top:20px;
+
+}
+
+.quick-card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:40px 20px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:#333;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+    cursor:pointer;
+
+    transition:
+    transform .25s,
+    background .25s,
+    color .25s;
+
+}
+
+.quick-card:hover{
+
+    transform:translateY(-6px);
+
+    background:#0d6efd;
+
+    color:white;
+
+}
+
+.icon{
+
+    font-size:60px;
+
+}
+
+.title{
+
+    margin-top:15px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+/* Overlay */
+.popup{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999;
+
+}
+
+/* Kotak popup */
+.popup-content{
+
+    width:320px;
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+
+}
+
+/* Tombol Counter */
+.counter-btn{
+
+    display:block;
+
+    width:100%;
+
+    margin:10px 0;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#f4f6f9;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.2s;
+
+}
+
+.counter-btn:hover{
+
+    background:#0d6efd;
+
+    color:white;
+
+}
+
+.activity-list{
+
+    height:360px;
+
+    overflow:hidden;
+
+}
+
+.activity-item{
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    border-left:5px solid #0d6efd;
+
+    background:white;
+
+    border-radius:8px;
+
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+
+    transform:translateY(-15px);
+
+    opacity:0;
+
+    animation:slideDown .45s cubic-bezier(.22,.61,.36,1) forwards;
+
+    transition:background .8s;
+
+}
+
+.activity-item.new{
+
+    background:#fff7c7;
+
+}
+
+.activity-time{
+
+    font-size:12px;
+
+    color:#777;
+
+}
+
+.activity-message{
+
+    margin-top:5px;
+
+    font-weight:bold;
+
+}
+
+@keyframes slideDown{
+
+    0%{
+
+        opacity:0;
+
+        transform:translateY(-35px) scale(.96);
+
+    }
+
+    60%{
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+.activity-empty{
+
+    color:#888;
+
+    text-align:center;
+
+    padding:20px;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-10px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}
+
+.activity-ticket{
+
+    border-left-color:#8e44ad;
+
+}
+
+.activity-calling{
+
+    border-left-color:#0d6efd;
+
+}
+
+.activity-recall{
+
+    border-left-color:#f39c12;
+
+}
+
+.activity-finish{
+
+    border-left-color:#27ae60;
+
+}
+
+.activity-skip{
+
+    border-left-color:#e74c3c;
+
+}
+
+.activity-online{
+
+    border-left-color:#16a085;
+
+}
+
+.activity-offline{
+
+    border-left-color:#7f8c8d;
+
+}
+
+.activity-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:8px;
+
+}
+
+.activity-type{
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    letter-spacing:1px;
+
+}
+
+.activity-counter{
+
+    margin-top:8px;
+
+    display:inline-block;
+
+    padding:4px 10px;
+
+    border-radius:20px;
+
+    background:#eef2f7;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    color:#888;
+
+    padding:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>🚰 AQMS Control Center</h1>
+
+    <p>
+        System Monitoring & Administration
+    </p>
+
+    <div id="clock"></div>
+
+</div>
+
+<div class="container">
+
+    <div class="panel">
+
+        <h2>❤️ System Health</h2>
+
+        <div id="healthContainer">
+
+            Loading...
+
+        </div>
+
+        <h2>⚡ Quick Access</h2>
+
+        <div class="quick-grid">
+
+            <a href="/kiosk.html" class="quick-card">
+
+                <div class="icon">🖨</div>
+
+                <div class="title">Kiosk</div>
+
+            </a>
+
+            <div class="quick-card" id="counterMenu">
+
+                <div class="icon">👨</div>
+
+                <div class="title">Counter</div>
+
+            </div>
+        
+            <a href="/display.html" class="quick-card">
+
+                <div class="icon">📺</div>
+
+                <div class="title">Display</div>
+
+            </a>
+
+            <a href="/dashboard.html" class="quick-card">
+
+                <div class="icon">📊</div>
+
+                <div class="title">Dashboard</div>
+
+            </a>
+
+            <div class="quick-card">
+
+                <div class="icon">📑</div>
+
+                <div class="title">Report</div>
+
+            </div>
+
+            <div class="quick-card">
+
+                <div class="icon">⚙</div>
+
+                <div class="title">Setting</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>📡 Live Activity</h2>
+
+        <div id="activityContainer" class="activity-list">
+
+            <div class="activity-empty">
+
+                Belum ada aktivitas...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer">
+
+    AQMS Version 1.0
+
+Powered by Node.js | Express | Socket.IO | SQLite
+
+</div>
+
+<div id="counterPopup" class="popup">
+
+    <div class="popup-content">
+
+        <h3>👨 Pilih Counter</h3>
+
+        <div id="counterList">
+
+            Loading...
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/launcher.js"></script>
+
+</body>
+</html>

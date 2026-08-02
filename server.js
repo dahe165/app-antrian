@@ -12,12 +12,18 @@ socket.init(io);
 const queueRoutes = require("./src/routes/queue.routes");
 const queueLock = require("./src/core/queueLock");
 const dashboardRoutes = require("./src/routes/dashboard.routes");
+const reportRoutes = require("./src/routes/report.routes");
+const displayRoutes = require("./src/routes/display.routes");
+const mediaRoutes = require("./src/routes/media.routes");
 app.use(express.json());
 app.use("/api", queueRoutes);
 app.use("/api", dashboardRoutes);
+app.use("/api", reportRoutes);
+app.use("/api/display", displayRoutes);
+app.use("/api/media", mediaRoutes);
 // Folder public
 app.use(express.static("public"));
-
+require("./src/routes")(app);
 // Socket.IO
 io.on("connection", (client) => {
 

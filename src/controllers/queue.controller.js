@@ -1,6 +1,8 @@
 const queueService = require("../services/queue.service");
 const socket = require("../socket/socket");
 const queueLock = require("../core/queueLock");
+const activityBus = require("../socket/activityBus");
+
 /**
  * Membuat nomor antrean baru
  */
@@ -11,6 +13,11 @@ function createQueue(req, res) {
         const layanan = req.body?.layanan || "A";
 
         const nomor = queueService.createQueue(layanan);
+
+        activityBus.log(
+            "ticket",
+            `Nomor ${nomor} berhasil dicetak`
+        );
 
         // Beri tahu semua Counter bahwa daftar antrean berubah
         socket.getIO().emit("queue-updated");
@@ -113,6 +120,11 @@ function recallQueue(req, res) {
 
         socket.getIO().emit("queue-called", queue);
 
+        activityBus.log(
+            "recall",
+            `Counter ${counter} memanggil ulang ${queue.nomor}`
+        );
+
         res.json({
             success: true
         });
@@ -151,6 +163,11 @@ function skipQueue(req, res) {
         console.log("⏭ SKIP:", current.nomor);
 
         queueService.skipQueue(current.id);
+
+        activityBus.log(
+            "skip",
+            `${current.nomor} dilewati Counter ${counter}`
+        );
 
         const next = queueService.callNextQueue(counter, layanan);
 
@@ -235,6 +252,12 @@ function callNextQueue(req, res) {
 
         // Kirim event ke semua browser yang terhubung
         socket.getIO().emit("queue-called", data);
+
+        activityBus.log(
+            "calling",
+            `Counter ${counter} memanggil ${data.nomor}`
+        );
+
         socket.getIO().emit("queue-updated");
         res.json({
             success: true,
@@ -276,6 +299,11 @@ function finishQueue(req, res) {
         console.log("AKAN FINISH ID:", current.id);
 
         queueService.finishQueue(current.id);
+
+        activityBus.log(
+            "finish",
+            `${current.nomor} selesai di Counter ${counter}`
+        );
 
         socket.getIO().emit("queue-updated");
 

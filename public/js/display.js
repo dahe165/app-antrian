@@ -1,5 +1,13 @@
 const socket = io();
 
+let playlist = [];
+
+let currentIndex = 0;
+
+const promoVideo = document.getElementById("promoVideo");
+console.log("VIDEO:", promoVideo);
+const promoImage = document.getElementById("promoImage");
+
 const number = document.getElementById("number");
 const counter = document.getElementById("counter");
 const clock = document.getElementById("clock");
@@ -57,6 +65,8 @@ utterance.onstart = () => {
 
 utterance.onend = () => {
     console.log("✅ Selesai mengumumkan:", queue.nomor);
+
+    setIdleMode();
 };
 
 utterance.onerror = (e) => {
@@ -66,6 +76,138 @@ utterance.onerror = (e) => {
     synth.speak(utterance);
 
 }
+
+async function loadTimeline(){
+
+    const res = await fetch("/api/display/timeline");
+
+    const data = await res.json();
+
+    const box = document.getElementById("timeline");
+
+    box.innerHTML = "";
+
+    data.forEach(item=>{
+
+        let icon="⏳";
+
+        if(item.status==="FINISHED") icon="✔";
+
+        if(item.status==="CALLING") icon="🔊";
+
+        if(item.status==="SERVING") icon="🔊";
+
+        if(item.status==="SKIPPED") icon="⏭";
+
+        box.innerHTML += `
+            <div class="timeline-item ${item.status.toLowerCase()}">
+                ${icon} ${item.nomor}
+            </div>
+        `;
+
+    });
+
+}
+
+function setQueueMode(){
+
+    const wrapper=document.getElementById("displayWrapper");
+
+    wrapper.classList.remove("idle-mode");
+
+    wrapper.classList.add("queue-mode");
+
+}
+
+function setIdleMode(){
+
+    const wrapper=document.getElementById("displayWrapper");
+
+    wrapper.classList.remove("queue-mode");
+
+    wrapper.classList.add("idle-mode");
+
+}
+
+async function loadPlaylist(){
+
+    const res =
+    await fetch("/api/media/playlist");
+
+    playlist =
+    await res.json();
+
+    console.log("Playlist:",playlist);
+
+    if(playlist.length){
+
+        playCurrent();
+
+    }
+
+}
+
+function nextMedia(){
+
+    currentIndex++;
+
+    if(currentIndex>=playlist.length){
+
+        currentIndex=0;
+
+    }
+
+    playCurrent();
+
+}
+
+function playCurrent(){
+
+    const item = playlist[currentIndex];
+
+    if(!item) return;
+
+    console.log("Now Playing:", item);
+
+    if(item.type==="video"){
+
+        promoImage.style.display="none";
+
+        promoVideo.style.display="block";
+
+        promoVideo.src=item.url;
+
+        promoVideo.load();
+
+        promoVideo.play()
+        .catch(console.error);
+
+    }
+
+    else{
+
+        promoVideo.pause();
+
+        promoVideo.style.display="none";
+
+        promoImage.style.display="block";
+
+        promoImage.src=item.url;
+
+        // tampil 10 detik
+        setTimeout(nextMedia,10000);
+
+    }
+
+}
+
+promoVideo.addEventListener(
+"ended",
+nextMedia
+);
+
+loadPlaylist();
+
 // Jam Digital
 function updateClock(){
 
@@ -82,6 +224,8 @@ updateClock();
 
 // Socket.IO
 socket.on("queue-called", (queue) => {
+
+    setQueueMode();
 
     console.log("📺 Display menerima queue-called:", queue);
 
@@ -108,6 +252,13 @@ socket.on("queue-called", (queue) => {
 
             number.classList.remove("speaking");
 
+             // Tunggu sebentar agar nomor masih terlihat
+            setTimeout(() => {
+
+                setIdleMode();
+
+            }, 2000);
+
         });
 
     }, 3000);
@@ -118,4 +269,14 @@ socket.on("queue-called", (queue) => {
 
     }, 250);
 
+});
+
+socket.on("queue-updated", () => {
+
+    loadTimeline();
+
+});
+
+socket.on("playlist-updated",()=>{
+    loadPlaylist();
 });
