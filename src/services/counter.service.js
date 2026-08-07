@@ -1,12 +1,32 @@
 const db = require("../database/database");
 
+const counterConfig = require("../config/services");
+
 function getCounters() {
 
-    return db.prepare(`
+    const counters = db.prepare(`
         SELECT *
         FROM counters
         ORDER BY id
     `).all();
+
+    return counters.map(counter => {
+
+        const config = counterConfig.counters[counter.id];
+
+        return {
+
+            id: counter.id,
+
+            name: config?.nama || counter.name,
+
+            layanan: config?.layanan || "-",
+
+            status: counter.status
+
+        };
+
+    });
 
 }
 
