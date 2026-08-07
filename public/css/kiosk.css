@@ -14,9 +14,9 @@ body{
 
     background:linear-gradient(135deg,#0D47A1,#1565C0);
 
-    height:100vh;
+    /*height:100vh;
 
-    display:flex;
+    display:flex;*/
 
     justify-content:center;
 
@@ -27,6 +27,8 @@ body{
 .container{
 
     width:700px;
+
+    margin:30px auto;
 
     background:white;
 
@@ -188,9 +190,9 @@ body{
 
     font-weight:bold;
 
-    min-height:80px;
+    min-height:20px;
 
-    margin-bottom:30px;
+    margin-bottom:16px;
 
 }
 
@@ -362,4 +364,132 @@ body{
   0% {
     background-position: -8000px -3000px;
   }
+}
+
+/* ===========================================================
+   MULTI SERVICE CARD
+=========================================================== */
+
+.services{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:stretch;
+
+    gap:22px;
+
+    width:100%;
+
+    margin-top:22px;
+
+    flex-wrap:wrap;
+
+}
+
+.service-card{
+
+    width:360px;
+
+    background:#ffffff;
+
+    border-radius:24px;
+
+    padding:22px 24px;
+
+    text-align:center;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.12);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+.service-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.18);
+
+}
+
+.service-icon{
+
+    font-size:40px;
+
+    margin-bottom:20px;
+
+}
+
+.service-title{
+
+    font-size:26px;
+
+    font-weight:bold;
+
+    color:#1565c0;
+
+    margin-bottom:18px;
+
+}
+
+.service-card p{
+
+    color:#666;
+
+    line-height:1.6;
+
+    margin-bottom:20px;
+
+}
+
+.ambil-btn{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#1976d2;
+
+    color:white;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    padding:16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.ambil-btn:hover{
+
+    background:#1565c0;
+
+    transform:scale(1.03);
+
+}
+
+.ambil-btn:active{
+
+    transform:scale(.97);
+
+}
+
+.ambil-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
 }

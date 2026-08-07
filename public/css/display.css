@@ -1,3 +1,205 @@
+/* ==========================================
+   AQMS Motion Engine
+========================================== */
+
+:root{
+
+    --fast:150ms;
+    --medium:350ms;
+    --slow:600ms;
+    --extra:1000ms;
+
+    --ease:cubic-bezier(.2,.8,.2,1);
+
+}
+
+/* Semua komponen utama */
+
+.card,
+.timeline-item,
+#number,
+#promoVideo,
+#promoImage,
+button{
+
+    transition:
+
+    transform var(--medium) var(--ease),
+
+    opacity var(--medium) var(--ease),
+
+    filter var(--medium) var(--ease),
+
+    background var(--medium) var(--ease),
+
+    color var(--medium) var(--ease);
+
+}
+
+@keyframes queueEnter{
+
+0%{
+
+opacity:0;
+
+transform:
+
+scale(.75)
+
+translateY(25px);
+
+filter:blur(10px);
+
+}
+
+100%{
+
+opacity:1;
+
+transform:
+
+scale(1)
+
+translateY(0);
+
+filter:blur(0);
+
+}
+
+}
+
+.queue-enter{
+
+animation:
+
+queueEnter
+
+var(--medium)
+
+var(--ease);
+
+}
+
+@keyframes breathingGlow{
+
+0%{
+
+text-shadow:
+
+0 0 10px rgba(70,150,255,.45);
+
+}
+
+50%{
+
+text-shadow:
+
+0 0 28px rgba(70,150,255,.95);
+
+}
+
+100%{
+
+text-shadow:
+
+0 0 10px rgba(70,150,255,.45);
+
+}
+
+}
+
+#number{
+
+animation:
+
+breathingGlow
+
+3s
+
+ease-in-out
+
+infinite;
+
+}
+
+.media-blur{
+
+filter:
+
+blur(8px)
+
+brightness(.45);
+
+transform:scale(1.03);
+
+}
+
+@keyframes footerSlide{
+
+from{
+
+opacity:0;
+
+transform:
+
+translateX(50px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:
+
+translateX(0);
+
+}
+
+}
+
+.timeline-item{
+
+animation:
+
+footerSlide
+
+var(--medium)
+
+var(--ease);
+
+}
+
+button:hover{
+
+transform:
+
+translateY(-2px);
+
+filter:
+
+brightness(1.08);
+
+box-shadow:
+
+0 8px 25px
+
+rgba(0,0,0,.2);
+
+}
+
+*{
+
+-webkit-font-smoothing:
+
+antialiased;
+
+-moz-osx-font-smoothing:
+
+grayscale;
+
+}
+
 body{
 
     margin:0;

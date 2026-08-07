@@ -16,6 +16,8 @@ function createQueue(req, res) {
 
         activityBus.log(
             "ticket",
+            nomor,
+            null,
             `Nomor ${nomor} berhasil dicetak`
         );
 
@@ -122,6 +124,8 @@ function recallQueue(req, res) {
 
         activityBus.log(
             "recall",
+            queue.nomor,
+            counter,
             `Counter ${counter} memanggil ulang ${queue.nomor}`
         );
 
@@ -166,6 +170,8 @@ function skipQueue(req, res) {
 
         activityBus.log(
             "skip",
+            current.nomor,
+            counter,
             `${current.nomor} dilewati Counter ${counter}`
         );
 
@@ -255,7 +261,9 @@ function callNextQueue(req, res) {
 
         activityBus.log(
             "calling",
-            `Counter ${counter} memanggil ${data.nomor}`
+            data.nomor,
+            counter,
+        `Counter ${counter} memanggil ${data.nomor}`
         );
 
         socket.getIO().emit("queue-updated");
@@ -302,6 +310,8 @@ function finishQueue(req, res) {
 
         activityBus.log(
             "finish",
+            current.nomor,
+            counter,
             `${current.nomor} selesai di Counter ${counter}`
         );
 

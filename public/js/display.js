@@ -77,31 +77,69 @@ utterance.onerror = (e) => {
 
 }
 
-async function loadTimeline(){
+async function loadTimeline() {
 
     const res = await fetch("/api/display/timeline");
 
     const data = await res.json();
 
+    const activity = data.activity || [];
+
+    const waiting = data.waiting || [];
+
     const box = document.getElementById("timeline");
 
     box.innerHTML = "";
 
-    data.forEach(item=>{
+    // =====================
+    // Activity dulu
+    // =====================
 
-        let icon="⏳";
+    activity.forEach(item => {
 
-        if(item.status==="FINISHED") icon="✔";
+        let icon = "📌";
 
-        if(item.status==="CALLING") icon="🔊";
+        switch (item.type) {
 
-        if(item.status==="SERVING") icon="🔊";
+            case "calling":
+                icon = "🔊";
+                break;
 
-        if(item.status==="SKIPPED") icon="⏭";
+            case "finish":
+                icon = "✔";
+                break;
+
+            case "recall":
+                icon = "🔄";
+                break;
+
+            case "skip":
+                icon = "⏭";
+                break;
+
+            case "ticket":
+                icon = "🎫";
+                break;
+
+        }
 
         box.innerHTML += `
-            <div class="timeline-item ${item.status.toLowerCase()}">
+            <div class="timeline-item activity ${item.type}">
                 ${icon} ${item.nomor}
+            </div>
+        `;
+
+    });
+
+    // =====================
+    // Waiting Queue
+    // =====================
+
+    waiting.forEach(item => {
+
+        box.innerHTML += `
+            <div class="timeline-item waiting">
+                ⏳ ${item.nomor}
             </div>
         `;
 
@@ -194,8 +232,8 @@ function playCurrent(){
 
         promoImage.src=item.url;
 
-        // tampil 10 detik
-        setTimeout(nextMedia,10000);
+        // tampil 60 detik
+        setTimeout(nextMedia,60000);
 
     }
 
@@ -233,6 +271,11 @@ socket.on("queue-called", (queue) => {
 
     number.textContent = queue.nomor;
 
+    // Mainkan animasi muncul
+    number.classList.remove("queue-enter");
+    void number.offsetWidth; // reset animation
+    number.classList.add("queue-enter");
+
     counter.textContent = "Counter " + queue.counter;
 
     bell.play();
@@ -257,7 +300,7 @@ socket.on("queue-called", (queue) => {
 
                 setIdleMode();
 
-            }, 2000);
+            }, 30000);
 
         });
 

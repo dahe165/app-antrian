@@ -15,6 +15,7 @@ const dashboardRoutes = require("./src/routes/dashboard.routes");
 const reportRoutes = require("./src/routes/report.routes");
 const displayRoutes = require("./src/routes/display.routes");
 const mediaRoutes = require("./src/routes/media.routes");
+
 app.use(express.json());
 app.use("/api", queueRoutes);
 app.use("/api", dashboardRoutes);

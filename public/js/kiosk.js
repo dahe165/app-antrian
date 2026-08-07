@@ -1,50 +1,72 @@
-const tombol = document.getElementById("ambil");
+const tombol = document.querySelectorAll(".ambil-btn");
 const hasil = document.getElementById("hasil");
 
 const overlay = document.getElementById("overlay");
 const popupNumber = document.getElementById("popup-number");
 
-tombol.addEventListener("click", async () => {
+tombol.forEach(btn=>{
 
-    tombol.disabled = true;
-    tombol.innerHTML = "MEMPROSES...";
+    btn.addEventListener("click",async()=>{
 
-    try {
+        btn.disabled=true;
 
-        const response = await fetch("/api/ticket", {
-            method: "POST"
-        });
+        btn.innerHTML="MEMPROSES...";
 
-        const data = await response.json();
+        try{
 
-        // Tidak perlu lagi tampil di halaman utama
-        hasil.innerHTML = "";
+            const layanan =
+            btn.dataset.layanan;
 
-        // Isi nomor pada Success Card
-        popupNumber.innerHTML = data.nomor;
+            const response =
+            await fetch("/api/ticket",{
 
-        // Tampilkan Success Card
-        overlay.classList.remove("hidden");
+                method:"POST",
 
-        // Tutup otomatis setelah 2 detik
-        setTimeout(() => {
+                headers:{
+                    "Content-Type":"application/json"
+                },
 
-            overlay.classList.add("hidden");
+                body:JSON.stringify({
 
-            tombol.disabled = false;
-            tombol.innerHTML = "AMBIL NOMOR";
+                    layanan
 
-        }, 2000);
+                })
 
-    } catch (err) {
+            });
 
-        console.error(err);
+            const data =
+            await response.json();
 
-        tombol.disabled = false;
-        tombol.innerHTML = "AMBIL NOMOR";
+            hasil.innerHTML="";
 
-        alert("Terjadi kesalahan.");
+            popupNumber.innerHTML=
+            data.nomor;
 
-    }
+            overlay.classList.remove("hidden");
+
+            setTimeout(()=>{
+
+                overlay.classList.add("hidden");
+
+                btn.disabled=false;
+
+                btn.innerHTML="AMBIL NOMOR";
+
+            },2000);
+
+        }
+        catch(err){
+
+            console.error(err);
+
+            btn.disabled=false;
+
+            btn.innerHTML="AMBIL NOMOR";
+
+            alert("Terjadi kesalahan.");
+
+        }
+
+    });
 
 });

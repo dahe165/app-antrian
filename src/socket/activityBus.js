@@ -1,21 +1,50 @@
 const socket = require("./socket");
 
-function log(type, message) {
+const history=[];
 
-    socket.getIO().emit("activity-log", {
+function log(type, nomor, counter, message){
 
-        time: new Date().toLocaleTimeString("id-ID"),
+    const item = {
 
-        type,
+    time: new Date().toLocaleTimeString("id-ID"),
 
-        message
+    type,
 
-    });
+    nomor,
+
+    counter,
+
+    message
+
+};
+
+    history.unshift(item);
+
+    if(history.length>20){
+
+        history.pop();
+
+    }
+
+    socket
+        .getIO()
+        .emit(
+            "activity-log",
+            item
+        );
 
 }
 
-module.exports = {
+function getRecent(limit=4){
 
-    log
+    return history.slice(0,limit);
+
+}
+
+module.exports={
+
+    log,
+
+    getRecent
 
 };

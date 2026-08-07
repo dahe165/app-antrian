@@ -1,28 +1,24 @@
 const db = require("../database/database");
+const activityBus = require("../socket/activityBus");
 
 function getTimeline() {
 
-    return db.prepare(`
-        SELECT
-            nomor,
-            status,
-            counter
+    const activity = activityBus.getRecent(4);
+
+    const waiting = db.prepare(`
+        SELECT nomor
         FROM queues
-        WHERE status IN (
-            'WAITING',
-            'CALLING',
-            'SERVING',
-            'FINISHED',
-            'SKIPPED'
-        )
+        WHERE status='WAITING'
         ORDER BY id DESC
-        LIMIT 5
     `).all();
+
+    return {
+        activity,
+        waiting
+    };
 
 }
 
 module.exports = {
-
     getTimeline
-
 };

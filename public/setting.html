@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AQMS System Setting</title>
+
+    <link rel="stylesheet" href="css/setting.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>⚙ AQMS SYSTEM SETTING</h1>
+
+        <p>Pengaturan Sistem Antrean</p>
+
+    </div>
+
+    <div class="tab-menu">
+
+        <button class="tab active"
+                data-tab="company">
+            🏢 Perusahaan
+        </button>
+
+        <button class="tab"
+                data-tab="counter">
+            👨 Counter
+        </button>
+
+        <button class="tab"
+                data-tab="service">
+            🏢 Layanan
+        </button>
+
+        <button class="tab"
+                data-tab="display">
+            📺 Display
+        </button>
+
+        <button class="tab"
+                data-tab="voice">
+            🔊 Voice
+        </button>
+
+        <button class="tab"
+                data-tab="media">
+            🎬 Media
+        </button>
+
+    </div>
+
+    <div class="content">
+
+        <!-- PERUSAHAAN -->
+
+        <div class="tab-content active"
+             id="company">
+
+            <div class="card">
+
+                <h2>Informasi Perusahaan</h2>
+
+                <label>Nama Instansi</label>
+
+                <input
+                    type="text"
+                    id="companyName">
+
+                <label>Alamat</label>
+
+                <textarea
+                    id="companyAddress"
+                    rows="3">
+                </textarea>
+
+                <label>Footer</label>
+
+                <input
+                    type="text"
+                    id="footerText">
+
+                <button
+                    class="btn-save">
+                    💾 Simpan
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- COUNTER -->
+
+        <div class="tab-content"
+             id="counter">
+
+            <div class="card">
+
+                <h2>Counter</h2>
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nama</th>
+
+                        <th>Layanan</th>
+
+                        <th>Status</th>
+
+                        <th>Aksi</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="counterTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- LAYANAN -->
+
+        <div class="tab-content"
+             id="service">
+
+            <div class="card">
+
+                <h2>Daftar Layanan</h2>
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Kode</th>
+
+                        <th>Nama</th>
+
+                        <th>Aksi</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="serviceTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- DISPLAY -->
+
+        <div class="tab-content"
+             id="display">
+
+            <div class="card">
+
+                <h2>Display TV</h2>
+
+                <label>Durasi Tampil Nomor (detik)</label>
+
+                <input
+                    type="number"
+                    id="displayDuration">
+
+                <label>Running Text</label>
+
+                <textarea
+                    id="runningText"
+                    rows="3">
+                </textarea>
+
+                <button
+                    class="btn-save">
+                    💾 Simpan
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- VOICE -->
+
+        <div class="tab-content"
+             id="voice">
+
+            <div class="card">
+
+                <h2>Voice</h2>
+
+                <label>Volume</label>
+
+                <input
+                    type="range"
+                    id="volume"
+                    min="0"
+                    max="100">
+
+                <label>Speed</label>
+
+                <input
+                    type="range"
+                    id="speed"
+                    min="0.5"
+                    max="2"
+                    step="0.1">
+
+                <label>Pitch</label>
+
+                <input
+                    type="range"
+                    id="pitch"
+                    min="0"
+                    max="2"
+                    step="0.1">
+
+                <button
+                    class="btn-save">
+                    💾 Simpan
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- MEDIA -->
+
+        <div class="tab-content"
+             id="media">
+
+            <div class="card">
+
+                <h2>Media Promo</h2>
+
+                <input
+                    type="file"
+                    multiple>
+
+                <button
+                    class="btn-save">
+                    ⬆ Upload
+                </button>
+
+                <div
+                    id="mediaList">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/setting.js"></script>
+
+</body>
+</html>

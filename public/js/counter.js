@@ -15,6 +15,17 @@ const socket = io();
 const params = new URLSearchParams(window.location.search);
 const COUNTER_ID = Number(params.get("id") || 1);
 
+const COUNTER_SERVICE = {
+
+    1: "A",
+    2: "A",
+    3: "A",
+    4: "B"
+
+};
+
+const LAYANAN = COUNTER_SERVICE[COUNTER_ID] || "A";
+
 // Ubah judul Counter
 document.getElementById("counterTitle").textContent = `COUNTER ${COUNTER_ID}`;
 
@@ -72,7 +83,7 @@ async function loadCurrent() {
 // Ambil daftar antrean menunggu
 async function loadWaiting() {
 
-    const response = await fetch("/api/waiting");
+    const response = await fetch(`/api/waiting?layanan=${LAYANAN}`);
 
     const data = await response.json();
 
@@ -86,17 +97,30 @@ async function loadWaiting() {
 
     }
 
-    waitingList.innerHTML = "";
+    waitingList.innerHTML="";
 
-    data.forEach(item => {
+waitingTotal.textContent=data.length;
 
-        waitingList.innerHTML += `
-            <div class="waiting-item">
-                ${item.nomor}
-            </div>
-        `;
+data.forEach((item,index)=>{
 
-    });
+    console.log("🎯 Render:", item.nomor);
+
+    waitingList.innerHTML+=`
+
+        <div class="waiting-item ${index===0?'next':''}">
+
+            ${index===0?'⭐ ':''}
+
+            ${item.nomor}
+
+        </div>
+
+    `;
+
+});
+
+console.log("📄 HTML:", waitingList.innerHTML);
+console.log("Jumlah Item:", waitingList.children.length);
 
 }
 
@@ -122,7 +146,7 @@ btnCall.addEventListener("click", async () => {
 
             counter: COUNTER_ID,
 
-            layanan: "A"
+            layanan: LAYANAN
 
         })
 
@@ -221,7 +245,7 @@ btnSkip.addEventListener("click", async () => {
 
             counter: COUNTER_ID,
 
-            layanan:"A"
+            layanan: LAYANAN
 
         })
 

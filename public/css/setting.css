@@ -1,0 +1,238 @@
+/* ===================================================
+   AQMS SYSTEM SETTING
+   Developed by Vicky + ChatGPT
+=================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+
+    background:#edf2f7;
+
+    color:#222;
+
+}
+
+/* ===========================
+        CONTAINER
+=========================== */
+
+.container{
+
+    width:95%;
+
+    max-width:1400px;
+
+    margin:30px auto;
+
+}
+
+/* ===========================
+         HEADER
+=========================== */
+
+.header{
+
+    background:linear-gradient(135deg,#1565c0,#0d47a1);
+
+    color:white;
+
+    padding:30px;
+
+    border-radius:15px 15px 0 0;
+
+    box-shadow:0 5px 18px rgba(0,0,0,.18);
+
+}
+
+.header h1{
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.header p{
+
+    margin-top:8px;
+
+    opacity:.9;
+
+}
+
+/* ===========================
+        TAB MENU
+=========================== */
+
+.tab-menu{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    background:white;
+
+    padding:18px;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+.tab{
+
+    border:none;
+
+    background:#eef2f7;
+
+    color:#444;
+
+    padding:12px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.tab:hover{
+
+    background:#dbeafe;
+
+    transform:translateY(-2px);
+
+}
+
+.tab.active{
+
+    background:#1565c0;
+
+    color:white;
+
+}
+
+/* ===========================
+        CONTENT
+=========================== */
+
+.content{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:0 0 15px 15px;
+
+    min-height:650px;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+
+}
+
+/* ===========================
+        TAB CONTENT
+=========================== */
+
+.tab-content{
+
+    display:none;
+
+}
+
+.tab-content.active{
+
+    display:block;
+
+}
+
+/* ===========================
+            CARD
+=========================== */
+
+.card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:30px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+    border:1px solid #ececec;
+
+}
+
+.card h2{
+
+    margin-bottom:25px;
+
+    color:#1565c0;
+
+}
+
+/* ===========================
+            FORM
+=========================== */
+
+label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#555;
+
+}
+
+input[type=text],
+input[type=number],
+textarea{
+
+    width:100%;
+
+    padding:12px 15px;
+
+    border:1px solid #d6d6d6;
+
+    border-radius:10px;
+
+    outline:none;
+
+    transition:.25s;
+
+    font-size:15px;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+}
+
+input:focus,
+textarea:focus{
+
+    border-color:#1565c0;
+
+    box-shadow:0 0 0 4px rgba(21,101,192,.15);
+
+}

@@ -118,34 +118,55 @@
 
         .waiting-list{
 
-            border:1px solid #ddd;
-            border-radius:5px;
-            padding:15px;
-            min-height:150px;
+    display:grid;
 
-        }
+    grid-template-columns:
+
+        repeat(2,1fr);
+
+    gap:12px;
+
+    height:260px;
+
+    overflow-y:auto;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    padding:15px;
+
+}
 
         .waiting-item{
 
-            font-size:24px;
+    display:flex;
 
-            padding:12px;
+    align-items:center;
 
-            border-radius:8px;
+    justify-content:center;
 
-            margin-bottom:8px;
+    height:58px;
 
-            background:#f8f9fa;
+    background:#f7f9fc;
 
-            transition:.2s;
+    border-radius:12px;
 
-        }
+    font-size:26px;
+
+    font-weight:bold;
+
+    transition:.25s;
+
+}
 
         .waiting-item:hover{
 
-            background:#e9ecef;
+    transform:translateY(-2px);
 
-        }
+    background:#eef5ff;
+
+}
 
         .buttons{
 
@@ -210,6 +231,66 @@
 
         }
 
+        .waiting-wrapper{
+
+    margin-top:25px;
+
+}
+
+.waiting-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+.waiting-total{
+
+    min-width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    background:#fc8f8f;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:bold;
+
+    font-size:18px;
+
+}
+
+.waiting-item.next{
+
+    background:
+
+    linear-gradient(
+
+    135deg,
+
+    #feffdf,
+
+    #fdffe8
+
+    );
+
+    color:rgb(34, 34, 34);
+
+}
+
     </style>
 
 </head>
@@ -247,13 +328,27 @@
 
         <hr>
 
+        <div class="waiting-wrapper">
+
+    <div class="waiting-header">
+
         <h3>Daftar Menunggu</h3>
 
-        <div id="waitingList" class="waiting-list">
+        <div id="waitingTotal" class="waiting-total">
 
-            Belum ada antrean.
+            0
 
         </div>
+
+    </div>
+
+    <div
+        id="waitingList"
+        class="waiting-list">
+
+    </div>
+
+</div>
 
         <div class="buttons">
 

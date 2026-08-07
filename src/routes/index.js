@@ -6,4 +6,10 @@ module.exports = (app) => {
 
     app.use("/api", require("./report.routes"));
 
+    app.use("/display", require("./display.routes"));
+
+    app.use("/media", require("./media.routes"));
+
+    app.use("/setting", require("./setting.routes"));
+
 };
