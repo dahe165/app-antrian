@@ -68,7 +68,7 @@ function renderCounters(data){
 
             <td>${counter.id}</td>
 
-            <td>${counter.nama}</td>
+            <td>${counter.name}</td>
 
             <td>
 
@@ -112,13 +112,221 @@ function renderCounters(data){
 
         btn.addEventListener("click", () => {
 
-            const id = btn.dataset.id;
+            const id = Number(btn.dataset.id);
 
-            alert("Edit Counter ID : " + id);
+            const counter = data.find(c => c.id === id);
+
+            if (!counter) {
+                console.error("Counter tidak ditemukan:", id);
+                return;
+            }
+
+            showEditCounter(counter);
 
         });
 
     });
+
+}
+
+// ================================
+// EDIT COUNTER
+// ================================
+
+function showEditCounter(counter) {
+
+    const oldModal = document.getElementById("editCounterModal");
+
+    if (oldModal) {
+        oldModal.remove();
+    }
+
+    const modal = document.createElement("div");
+
+    modal.id = "editCounterModal";
+
+    modal.innerHTML = `
+
+        <div class="edit-modal-overlay">
+
+            <div class="edit-modal">
+
+                <div class="edit-modal-header">
+                    <h2>Edit Counter</h2>
+                    <button id="btnCloseEdit">✕</button>
+                </div>
+
+                <div class="edit-modal-body">
+
+                    <div class="form-group">
+
+                        <label>ID Counter</label>
+
+                        <input
+                            type="text"
+                            value="${counter.id}"
+                            disabled>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Nama Counter</label>
+
+                        <input
+                            type="text"
+                            id="editCounterName"
+                            value="${counter.nama || ""}">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Layanan</label>
+
+                        <select id="editCounterService">
+
+                            <option
+                                value="A"
+                                ${counter.layanan === "A" ? "selected" : ""}>
+                                A
+                            </option>
+
+                            <option
+                                value="B"
+                                ${counter.layanan === "B" ? "selected" : ""}>
+                                B
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="edit-modal-footer">
+
+                    <button
+                        id="btnCancelEdit"
+                        class="btn-cancel">
+                        Batal
+                    </button>
+
+                    <button
+                        id="btnSaveEdit"
+                        class="btn-save">
+                        💾 Simpan
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(modal);
+
+    // ================================
+    // CLOSE
+    // ================================
+
+    document
+        .getElementById("btnCloseEdit")
+        .addEventListener("click", closeEditCounter);
+
+    document
+        .getElementById("btnCancelEdit")
+        .addEventListener("click", closeEditCounter);
+
+    // ================================
+    // SAVE
+    // ================================
+
+    document
+    .getElementById("btnSaveEdit")
+    .addEventListener("click", async () => {
+
+        const nama =
+            document
+                .getElementById("editCounterName")
+                .value
+                .trim();
+
+        const layanan =
+            document
+                .getElementById("editCounterService")
+                .value;
+
+        if (!nama) {
+
+            alert("Nama Counter wajib diisi");
+
+            return;
+
+        }
+
+        try {
+
+            const response = await fetch(
+                `/api/counters/${counter.id}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        nama,
+                        layanan
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            console.log("STATUS:", response.status);
+            console.log("HASIL:", result);
+
+            if (!response.ok) {
+
+                alert(result.message || "Gagal menyimpan");
+
+                return;
+
+            }
+
+            closeEditCounter();
+
+            await loadCounters();
+
+        } catch (err) {
+
+            console.error("Gagal menyimpan counter:", err);
+
+            alert("Tidak dapat terhubung ke server");
+
+        }
+
+    });
+
+}
+
+// ================================
+// CLOSE EDIT COUNTER
+// ================================
+
+function closeEditCounter() {
+
+    const modal = document.getElementById("editCounterModal");
+
+    if (modal) {
+
+        modal.style.display = "none";
+
+    }
 
 }
 

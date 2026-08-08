@@ -1,6 +1,8 @@
 const db = require("../database/database");
 
-const counterConfig = require("../config/services");
+// ================================
+// GET ALL COUNTERS
+// ================================
 
 function getCounters() {
 
@@ -12,23 +14,39 @@ function getCounters() {
 
     return counters.map(counter => {
 
-        const config = counterConfig.counters[counter.id];
-
         return {
 
             id: counter.id,
 
-            name: config?.nama || counter.name,
+            name: counter.nama || counter.name,
 
-            layanan: config?.layanan || "-",
+            layanan: counter.layanan || "-",
 
             status: counter.status
 
         };
 
     });
+}
+
+// ================================
+// UPDATE COUNTER
+// ================================
+
+function updateCounter(id, nama, layanan) {
+
+    return db.prepare(`
+        UPDATE counters
+        SET nama = ?,
+            layanan = ?
+        WHERE id = ?
+    `).run(nama, layanan, id);
 
 }
+
+// ================================
+// SET COUNTER STATUS
+// ================================
 
 function setCounterStatus(id, status) {
 
@@ -40,6 +58,10 @@ function setCounterStatus(id, status) {
 
 }
 
+// ================================
+// GET SINGLE COUNTER
+// ================================
+
 function getCounter(id) {
 
     return db.prepare(`
@@ -50,12 +72,19 @@ function getCounter(id) {
 
 }
 
+
+// ================================
+// EXPORT
+// ================================
+
 module.exports = {
 
     getCounters,
 
     setCounterStatus,
 
-    getCounter
+    getCounter,
+
+    updateCounter
 
 };

@@ -17,6 +17,8 @@ router.get("/counters", counterController.getCounters);
 
 router.post("/counter/status", counterController.setStatus);
 
+router.put("/counters/:id", counterController.updateCounter);
+
 // Panggil nomor berikutnya
 router.post("/call", queueController.callNextQueue);
 

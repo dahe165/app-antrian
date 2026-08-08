@@ -51,6 +51,10 @@ CREATE TABLE IF NOT EXISTS counters (
 
     name TEXT NOT NULL,
 
+    nama TEXT,
+
+    layanan TEXT,
+
     status TEXT NOT NULL DEFAULT 'OFFLINE'
 
 );
@@ -65,8 +69,8 @@ if (count.total === 0) {
 
     const insert = db.prepare(`
         INSERT INTO counters
-        (id,name,status)
-        VALUES (?,?,?)
+        (id,name,nama,layanan,status)
+        VALUES (?,?,?,?,?)
     `);
 
     for (let i = 1; i <= 4; i++) {
@@ -74,6 +78,8 @@ if (count.total === 0) {
         insert.run(
             i,
             `Counter ${i}`,
+            `Nama Counter ${i}`,
+            `Layanan ${i}`,
             "OFFLINE"
         );
 
@@ -84,5 +90,71 @@ if (count.total === 0) {
 console.log("✅ Default Counter berhasil dibuat");
 
 console.log("✅ Database siap digunakan");
+
+// ================================
+// MIGRASI COUNTERS
+// ================================
+
+const counterColumns = db
+    .prepare(`PRAGMA table_info(counters)`)
+    .all();
+
+const hasNama = counterColumns.some(
+    column => column.name === "nama"
+);
+
+const hasLayanan = counterColumns.some(
+    column => column.name === "layanan"
+);
+
+if (!hasNama) {
+
+    db.exec(`
+        ALTER TABLE counters
+        ADD COLUMN nama TEXT
+    `);
+
+    console.log("✅ Kolom nama berhasil ditambahkan");
+
+}
+
+if (!hasLayanan) {
+
+    db.exec(`
+        ALTER TABLE counters
+        ADD COLUMN layanan TEXT
+    `);
+
+    console.log("✅ Kolom layanan berhasil ditambahkan");
+
+}
+
+db.prepare(`
+    UPDATE counters
+    SET nama = ?,
+        layanan = ?
+    WHERE id = ?
+`).run("Customer Service", "A", 1);
+
+db.prepare(`
+    UPDATE counters
+    SET nama = ?,
+        layanan = ?
+    WHERE id = ?
+`).run("Customer Service", "A", 2);
+
+db.prepare(`
+    UPDATE counters
+    SET nama = ?,
+        layanan = ?
+    WHERE id = ?
+`).run("Customer Service", "A", 3);
+
+db.prepare(`
+    UPDATE counters
+    SET nama = ?,
+        layanan = ?
+    WHERE id = ?
+`).run("Loket Pembayaran", "B", 4);
 
 module.exports = db;
